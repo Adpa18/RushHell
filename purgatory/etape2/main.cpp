@@ -15,7 +15,8 @@ void    find_string(const std::string &str)
         }
         switch (gActionTable[currentState][strState]) {
             case MA:
-                build += *it;
+                if (alphabet.find(*it) != alphabet.npos)
+                    build += *it;
                 currentState = gStateTable[currentState][strState];
                 break;
             case HR:
@@ -23,7 +24,8 @@ void    find_string(const std::string &str)
                 build.clear();
                 currentState = S0;
                 if (gActionTable[currentState][strState] == MA) {
-                    build += *it;
+                    if (alphabet.find(*it) != alphabet.npos)
+                        build += *it;
                     currentState = gStateTable[currentState][strState];
                 }
                 break;
@@ -31,7 +33,8 @@ void    find_string(const std::string &str)
                 build.clear();
                 currentState = S0;
                 if (gActionTable[currentState][strState] == MA) {
-                    build += *it;
+                    if (alphabet.find(*it) != alphabet.npos)
+                        build += *it;
                     currentState = gStateTable[currentState][strState];
                 }
                 break;
