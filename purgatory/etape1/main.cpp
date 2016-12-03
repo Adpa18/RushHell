@@ -1,20 +1,10 @@
 #include <iostream>
 #include "Machine.hpp"
 
-const std::string alphabet = "mechant";
 
-int read_char(char c)
+void    find_string(const std::string &str)
 {
-
-}
-
-int peek_char(char c)
-{
-
-}
-
-int find_string(const std::string &str)
-{
+    const std::string alphabet = "mechant";
     std::string build = "";
     eState currentState = S0;
     size_t strState = 0;
@@ -23,34 +13,39 @@ int find_string(const std::string &str)
         if (strState != alphabet.npos) {
             switch (gActionTable[currentState][strState]) {
                 case MA:
-                    std::cout << "MA" << std::endl;
                     build += *it;
                     currentState = gStateTable[currentState][strState];
                     break;
                 case HR:
-                    std::cout << "HR" << std::endl;
                     std::cout << build << std::endl;
                     build.clear();
-                    --it;
                     currentState = S0;
+                    if (gActionTable[currentState][strState] == MA) {
+                        build += *it;
+                        currentState = gStateTable[currentState][strState];
+                    }
                     break;
                 case ACTION_ERROR:
-                    std::cout << "ACTION_ERROR" << std::endl;
                     build.clear();
                     currentState = S0;
+                    if (gActionTable[currentState][strState] == MA) {
+                        build += *it;
+                        currentState = gStateTable[currentState][strState];
+                    }
                     break;
             }
+        } else {
+            currentState = S0;
         }
     }
-    std::cout << build << std::endl;
-    return 0;
+    if (build == alphabet)
+        std::cout << build << std::endl;
 }
 
 int main(int ac, char **av)
 {
     if (ac < 2)
         return 1;
-    std::cout << find_string(av[1]) << std::endl;
-    std::cout << "Hello, World!" << std::endl;
+    find_string(av[1]);
     return 0;
 }
