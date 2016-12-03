@@ -1,4 +1,4 @@
-project(test_fsa)
+project(test_dynamic_fsa)
 
 set(CMAKE_CXX_STANDARD)
 

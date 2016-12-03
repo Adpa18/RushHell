@@ -24,7 +24,7 @@ State* FSA::getInitial() const {
     return m_state_initial;
 }
 
-State   *FSA::operator[](const std::string &name) const {
+State   *FSA::operator[](std::string const &name) const {
     for (std::list<State*>::const_iterator it = m_states.begin(); it != m_states.end(); ++it) {
         if ((*it)->getName() == name) {
             return (*it);
