@@ -1,0 +1,19 @@
+digraph fsa {
+  S56 -> S57 [label="m"];
+  S57 -> S58 [label="e"];
+  S58 -> S59 [label="c"];
+  S59 -> S60 [label="h"];
+  S60 -> S61 [label="a"];
+  S61 -> S62 [label="n"];
+  S62 -> S63 [label="t"];
+  S63 -> S64 [label="lambda"];
+  S64 -> S65 [label="c"];
+  S65 -> S66 [label="r"];
+  S66 -> S67 [label="i"];
+  S67 -> S68 [label="m"];
+  S68 -> S69 [label="i"];
+  S69 -> S70 [label="n"];
+  S70 -> S71 [label="e"];
+  S71 -> S72 [label="l"];
+  S72 [style="filled" color="red"]
+}

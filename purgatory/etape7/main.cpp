@@ -6,6 +6,8 @@
 #include <fstream>
 #include <cassert>
 #include "Matcher.hpp"
+#include "Parser.hpp"
+#include "ExpressionParser.hpp"
 
 FSA *criminel() {
 
@@ -99,7 +101,86 @@ void unitTestNFAtoDFA()
     std::cout << "\033[1;32mbold" << "Tests NFA to DFA OK" << "\033[0m" << std::endl;
 }
 
+void unitTestExport()
+{
+    std::cout << "\033[1;33m" << "Start Export DOT tests :" << "\033[0m" << std::endl << std::endl;
+
+    FSA *m = mechant();
+    FSA *c = criminel();
+
+    assert(FSA::exportDOT(m, "mechant"));
+    std::cout << "\t\033[1;34m" << "test " << 1 << "/" << 5 << " graph was exported to mechant.dot" << "\033[0m" << std::endl;
+
+    assert(FSA::exportDOT(c, "criminel"));
+    std::cout << "\t\033[1;34m" << "test " << 2 << "/" << 5 << " graph was exported to criminel.dot" << "\033[0m" << std::endl;
+
+    FSA *merge1 = FSA::MergeFSA(m, c, false);
+    assert(FSA::exportDOT(merge1, "union1"));
+    std::cout << "\t\033[1;34m" << "test " << 3 << "/" << 5 << " graph was exported to union1.dot" << "\033[0m" << std::endl;
+
+    delete m;
+    delete c;
+    delete merge1;
+    State::freeAll();
+    Edge::freeAll();
+    m = mechant();
+    c = criminel();
+
+    FSA *merge2 = FSA::MergeFSA(m, c, true);
+    assert(FSA::exportDOT(merge2, "union2"));
+    std::cout << "\t\033[1;34m" << "test " << 4 << "/" << 5 << " graph was exported to union2.dot" << "\033[0m" << std::endl;
+
+    delete m;
+    delete c;
+    delete merge2;
+    State::freeAll();
+    Edge::freeAll();
+    m = mechant();
+    c = criminel();
+
+    FSA *concat = FSA::ConcateFSA(m, c);
+    assert(FSA::exportDOT(concat, "concat"));
+    std::cout << "\t\033[1;34m" << "test " << 5 << "/" << 5 << " graph was exported to concat.dot" << "\033[0m" << std::endl;
+
+    delete m;
+    delete c;
+    delete concat;
+    State::freeAll();
+    Edge::freeAll();
+
+    std::cout << "\033[1;32mbold" << "Tests Export DOT OK" << "\033[0m" << std::endl;
+}
+
+void unitTestExpressionParser()
+{
+    ExpressionParser exp("(mechant)|(criminel)");
+}
+
+void printToken(const std::string &t)
+{
+    std::cout << t << std::endl;
+}
+
+void unitTestStateFunctor()
+{
+    FSA *m = mechant();
+    FSA *c = criminel();
+
+    Function<void(const std::string &)> *f = new Function<void(const std::string &)>(&printToken);
+    c->getStates().back()->SetFunction(f);
+
+    FSA *merge = FSA::MergeFSA(m, c, true);
+
+    FSA *dfa = merge->subset();
+    Matcher *matcherDFA = new Matcher(*dfa);
+
+    matcherDFA->find("mechant");
+}
+
 int main() {
     unitTestNFAtoDFA();
+    unitTestExport();
+    unitTestExpressionParser();
+    unitTestStateFunctor();
     return 0;
 }

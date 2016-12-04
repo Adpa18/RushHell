@@ -13,11 +13,12 @@ public:
 
 private:
     Closure(State *state);
-
     LState m_closure;
+    static std::list<Closure*> _all;
 
 public:
     const LState &GetClosure() const;
+    static void freeAll();
 };
 
 std::ostream& operator<<(std::ostream& os, Closure& obj);

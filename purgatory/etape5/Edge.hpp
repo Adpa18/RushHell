@@ -7,6 +7,7 @@
 
 #include <list>
 #include <iostream>
+#include <vector>
 
 class Edge {
 public:
@@ -17,11 +18,17 @@ public:
     bool    operator==(char c) const;
     bool    operator==(Edge const &edge) const;
 
+    static std::vector<Edge*>  makeEdges(std::string const &str);
+
+
+    static void freeAll();
+
 public:
     char    getChar() const;
 
 private:
     char    m_c;
+    static std::list<Edge*> all;
 };
 
 typedef std::list<Edge*> LEdge;

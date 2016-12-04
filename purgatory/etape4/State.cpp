@@ -4,7 +4,10 @@
 
 
 #include <sstream>
+#include <assert.h>
 #include "State.hpp"
+
+std::list<State*> State::_all;
 
 size_t State::m_id = 0;
 
@@ -41,7 +44,9 @@ bool State::isFinal() const {
 }
 
 State* State::create() {
-    return new State();
+    State *tmp = new State();
+    _all.push_back(tmp);
+    return tmp;
 }
 
 void State::addLink(Edge *edge, State *state) {
@@ -64,8 +69,33 @@ std::list<Edge *> State::getEdges() const {
     return edges;
 }
 
-std::ostream& operator<<(std::ostream& os, const State& obj)
+void State::deleteEdges() {
+
+}
+
+void State::freeAll()
 {
-    os << "State -> " << obj.getName();
+    std::list<State*>::iterator states = _all.begin();
+    while (states != _all.end()) {
+        State *tmp = *states;
+        _all.erase(states++);
+        if (tmp != NULL)
+            delete tmp;
+    }
+}
+
+std::ostream& operator<<(std::ostream& os, const State& st)
+{
+    if (st.isFinal()) {
+        os << "  " <<  st.getName() << " [style=\"filled\" color=\"red\"]"<< std::endl;
+    }
+    Links const &links = st.getLinks();
+    for (Links::const_iterator l = links.begin(); l != links.end(); ++l) {
+        os << "  " << st.getName() << " -> "
+           << (*l).second->getName()
+           << " [label=\""
+                << (*(*l).first)
+           << "\"];" << std::endl;
+    }
     return os;
 }

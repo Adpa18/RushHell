@@ -7,7 +7,7 @@
 
 #include <list>
 #include "State.hpp"
-#include "Closure.h"
+#include "Closure.hpp"
 
 //Ensuite, créez une fonction membre statique pour concaténer ou unir deux FSA.
 //L’union de deux FSA peut être vue de deux manières différentes. Votre fonction doit pro-
@@ -50,15 +50,20 @@ private:
 public:
     static FSA *ConcateFSA(FSA * const f1, FSA * const f2);
     static FSA *MergeFSA(FSA * const f1, FSA * const f2, bool merge_end);
+    static FSA *genericFSA(const std::string str);
+    static bool exportDOT(FSA *fsa, const std::string &filename);
 
 private:
     static FSA *MergeClose(FSA * const f1, FSA * const f2);
     static FSA *MergeOpen(FSA * const f1, FSA * const f2);
+    static bool openFile(const std::string &filename, std::ofstream &fs);
 };
 
 void printListState(std::list<State*> list, const std::string &str);
 
 void printListEdge(std::list<Edge*> list, const std::string &str);
+
+std::ostream& operator<<(std::ostream& os, const FSA& fsa);
 
 #endif //RUSHHELL_FSA_HPP
 

@@ -1,0 +1,11 @@
+digraph fsa {
+  S27 -> S28 [label="c"];
+  S28 -> S29 [label="r"];
+  S29 -> S30 [label="i"];
+  S30 -> S31 [label="m"];
+  S31 -> S32 [label="i"];
+  S32 -> S33 [label="n"];
+  S33 -> S34 [label="e"];
+  S34 -> S35 [label="l"];
+  S35 [style="filled" color="red"]
+}

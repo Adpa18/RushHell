@@ -17,6 +17,11 @@ typedef std::map<Edge*, State*> Links;
 class State {
 private:
     State();
+    static std::list<State*> _all;
+
+
+public:
+    static void freeAll();
     virtual ~State();
 
 private:
@@ -35,6 +40,7 @@ public:
 public:
     void                setFinal(bool fin);
     bool                isFinal() const;
+    void                deleteEdges();
 
 public:
     static State        *create();

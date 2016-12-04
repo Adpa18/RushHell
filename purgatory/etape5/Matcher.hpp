@@ -19,9 +19,6 @@ private:
 public:
     bool    find(std::string const &str) const;
     bool    find(std::string const &str, int &nb_matches) const;
-
-private:
-    std::vector<Edge*>  makeEdges(std::string const &str) const;
 };
 
 #endif //RUSHHELL_MATCHER_HPP
