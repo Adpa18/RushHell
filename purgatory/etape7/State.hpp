@@ -9,6 +9,7 @@
 #include <cstring>
 #include <map>
 #include <list>
+#include "Function.hpp"
 #include "Edge.hpp"
 
 class State;
@@ -29,6 +30,7 @@ private:
     std::string             m_name;
     bool                    m_final;
     Links                   m_links;
+    Function<void(const std::string &token)> *m_func;
 
 public:
     bool    operator==(std::string const &name) const;
@@ -50,6 +52,10 @@ public:
     Links const     &getLinks() const;
     State           *operator[](Edge *edge);
     std::list<Edge*>    getEdges() const;
+    void            SetFunction(Function<void(const std::string &token)> *);
+    void            ExecFunc(const std::string &str) const;
+    Function<void(const std::string &token)> *GetFunc() const;
+    void            DeleteFunc();
 };
 
 std::ostream& operator<<(std::ostream& os, const State& obj);

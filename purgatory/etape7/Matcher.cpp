@@ -46,6 +46,7 @@ bool Matcher::find(const std::string &str, int &nb_matches) const {
                 }
                 if (current_state->isFinal()) {
                     ret = true;
+                    current_state->ExecFunc(build);
                     ++nb_matches;
                     current_state = *initial;
                     build.clear();

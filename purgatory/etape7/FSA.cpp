@@ -72,7 +72,6 @@ std::list<State*> FSA::closure(State *state) const {
 }
 
 std::list<State*> FSA::move(State *state, Edge *edge) const {
-
     std::list<State*>   clinks;
 
     if (state) {
@@ -158,6 +157,7 @@ FSA *FSA::ConcateFSA(FSA *const f1, FSA *const f2) {
         fsa->addState(*st);
         if ((*st)->isFinal())
         {
+            (*st)->DeleteFunc();
             (*st)->setFinal(false);
             (*st)->addLink(lambda, *f2->getInitialStates().begin());
         }
@@ -226,7 +226,12 @@ FSA *FSA::MergeClose(FSA *const f1, FSA *const f2)
         }
     }
     if (final != NULL)
+    {
+        end->SetFunction(final->GetFunc());
+        final->DeleteFunc();
         final->addLink(le4, end);
+    }
+
     else
         delete le4;
     return fsa;

@@ -17,6 +17,7 @@ State::State(): m_final(false) {
     ss << "S" << m_id;
     m_name = ss.str();
     ++m_id;
+    m_func = NULL;
 }
 
 State::~State() {
@@ -82,6 +83,25 @@ void State::freeAll()
         if (tmp != NULL)
             delete tmp;
     }
+}
+
+void State::SetFunction(Function<void(const std::string &token)> *func) {
+    m_func = func;
+}
+
+void State::ExecFunc(const std::string &str) const
+{
+    if (m_func != NULL)
+        (*m_func)(str);
+}
+
+Function<void(const std::string &token)> *State::GetFunc() const {
+    return m_func;
+}
+
+void State::DeleteFunc() {
+    if (m_func != NULL)
+        m_func = NULL;
 }
 
 std::ostream& operator<<(std::ostream& os, const State& st)
