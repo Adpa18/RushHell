@@ -28,15 +28,15 @@ bool Matcher::find(const std::string &str, int &nb_matches) const {
         std::string build = "";
         State *current_state = initial;
         std::vector<Edge*>::const_iterator it = str_edges.begin();
-        std::cout << current_state->getName() << std::endl;
+        //std::cout << current_state->getName() << std::endl;
         while (it != str_edges.end()) {
             Links const &links = current_state->getLinks();
             for (Links::const_iterator link = links.begin(); link != links.end(); ++link) {
                 if (**it == *(link->first)) {
-                    std::cout << **it << std::endl;
+                    //std::cout << **it << std::endl;
                     build += link->first->getChar();
                     current_state = link->second;
-                    std::cout << current_state->getName() << std::endl;
+                    //std::cout << current_state->getName() << std::endl;
                 }
             }
             if (current_state->isFinal()) {
