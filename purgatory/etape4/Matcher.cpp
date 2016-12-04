@@ -15,7 +15,7 @@ Matcher::~Matcher() {
 
 bool Matcher::find(const std::string &str) const {
     int nb_matches;
-    find(str, nb_matches);
+    return find(str, nb_matches);
 }
 
 bool Matcher::find(const std::string &str, int &nb_matches) const {
@@ -28,7 +28,7 @@ bool Matcher::find(const std::string &str, int &nb_matches) const {
             std::string build = "";
             State *current_state = *initial;
 
-            std::cout << *current_state << std::endl;
+//            std::cout << *current_state << std::endl;
             std::vector<Edge*>::const_iterator it = str_edges.begin();
             while (it != str_edges.end()) {
                 Links const &links = current_state->getLinks();
@@ -41,7 +41,7 @@ bool Matcher::find(const std::string &str, int &nb_matches) const {
                     }
                 }
                 if (current_state->isFinal()) {
-                    std::cout << build << std::endl;
+//                    std::cout << build << std::endl;
                     ++nb_matches;
                     current_state = *initial;
                     build.clear();
@@ -53,7 +53,7 @@ bool Matcher::find(const std::string &str, int &nb_matches) const {
 
         }
     }
-    std::cout << std::endl;
+//    std::cout << std::endl;
     return true;
 }
 

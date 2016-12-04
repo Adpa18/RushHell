@@ -72,13 +72,9 @@ std::list<State*> FSA::closure(State *state) const {
 }
 
 std::list<State*> FSA::move(State *state, Edge *edge) const {
-//    return closure((*state)[edge]);
-    State   *current = (*state)[edge];
     std::list<State*>   clinks;
 
     if (state) {
-//        clinks.push_back(current);
-
         Links const &links = state->getLinks();
         for (Links::const_iterator it = links.begin(); it != links.end(); ++it) {
             if (it->first->getChar() != -1 && it->first == edge) {
@@ -113,19 +109,19 @@ FSA* FSA::subset() const {
             if (cl == lstate.begin())
                 dfa->setInitial(*cl);
             State *current = *cl;
-            std::cout << "Current -> "<< *current << std::endl;
+//            std::cout << "Current -> "<< *current << std::endl;
             LEdge const &le = current->getEdges();
             //for each edge in alphabet do
             for (LEdge_it e = le.begin(); e != le.end() ; ++e) {
-                std::cout << **e << std::endl;
+//                std::cout << **e << std::endl;
                 //states ← move(current, edge)
                 LState const &states = move(current, *e);
-                for (LState_it t = states.begin(); t != states.end() ; ++t) {
-                    std::cout << *(*t) << std::endl;
-                }
+//                for (LState_it t = states.begin(); t != states.end() ; ++t) {
+//                    std::cout << *(*t) << std::endl;
+//                }
                 //closure ← closure(states)
                 Closure *curr_cl = new Closure(closure(states));
-                std::cout << "\t" << *curr_cl << std::endl;
+//                std::cout << "\t" << *curr_cl << std::endl;
                 //if closure not in df a_states then
                 if (listNotInList(dfa->getStates(), curr_cl->GetClosure()))
                 {

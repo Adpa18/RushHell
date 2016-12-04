@@ -73,7 +73,7 @@ std::list<State*> FSA::closure(State *state) const {
 
 std::list<State*> FSA::move(State *state, Edge *edge) const {
 //    return closure((*state)[edge]);
-    State   *current = (*state)[edge];
+//    State   *current = (*state)[edge];
     std::list<State*>   clinks;
 
     if (state) {

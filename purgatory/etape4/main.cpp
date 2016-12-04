@@ -96,19 +96,25 @@ int main(int ac, char **av) {
         return 1;
     }
 
-    FSA *fsa = mechant();
+//    TODO remove debug and comments
+    FSA *fsa1 = mechant();
+    FSA *fsa2 = abc();
 
     int nb_matches;
     bool is;
-//    Matcher *matcherFSA = new Matcher(*fsa);
-//    is = matcherFSA->find(av[1], nb_matches);
-//    std::cout << std::boolalpha << is << " " << nb_matches << std::endl;
-
-    FSA *dfa = fsa->subset();
-    Matcher *matcherDFA = new Matcher(*dfa);
-
+    FSA *dfa1 = fsa1->subset();
+    Matcher *matcherDFA1 = new Matcher(*dfa1);
     for (int i = 1; i < ac; ++i) {
-        is = matcherDFA->find(av[i], nb_matches);
+        is = matcherDFA1->find(av[i], nb_matches);
+        std::cout << std::boolalpha << is << " " << nb_matches << std::endl;
+    }
+
+//    TODO return true mechant on abc
+
+    FSA *dfa2 = fsa2->subset();
+    Matcher *matcherDFA2 = new Matcher(*dfa2);
+    for (int i = 1; i < ac; ++i) {
+        is = matcherDFA2->find(av[i], nb_matches);
         std::cout << std::boolalpha << is << " " << nb_matches << std::endl;
     }
     return 0;

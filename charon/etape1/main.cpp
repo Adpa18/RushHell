@@ -14,19 +14,19 @@ int onefunction(const std::string& str)
 
 int twofunction(const std::string& str, int i)
 {
-    std::cout << str << std::endl;
+    std::cout << str << i << std::endl;
     return 0;
 }
 
 int threefunction(const std::string& str, int i, int j)
 {
-    std::cout << str << std::endl;
+    std::cout << str << i << j << std::endl;
     return 0;
 }
 
 int fourfunction(const std::string& str, int i, int j, int k)
 {
-    std::cout << str << std::endl;
+    std::cout << str << i << j << k << std::endl;
     return 0;
 }
 

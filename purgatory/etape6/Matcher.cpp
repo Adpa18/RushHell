@@ -15,7 +15,7 @@ Matcher::~Matcher() {
 
 bool Matcher::find(const std::string &str) const {
     int nb_matches;
-    find(str, nb_matches);
+    return find(str, nb_matches);
 }
 
 bool Matcher::find(const std::string &str, int &nb_matches) const {
