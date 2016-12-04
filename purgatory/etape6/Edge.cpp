@@ -49,8 +49,8 @@ void Edge::freeAll()
     }
 }
 
-std::ostream& operator<<(std::ostream& os, const Edge& obj)
+std::ostream& operator<<(std::ostream& os, const Edge& e)
 {
-    os << "Edge -> " << obj.getChar();
+    (e.getChar() == -1)?os << "lambda": os << e.getChar();
     return os;
 }

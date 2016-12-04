@@ -4,6 +4,7 @@
 
 
 #include <sstream>
+#include <assert.h>
 #include "State.hpp"
 
 std::list<State*> State::_all;
@@ -83,8 +84,18 @@ void State::freeAll()
     }
 }
 
-std::ostream& operator<<(std::ostream& os, const State& obj)
+std::ostream& operator<<(std::ostream& os, const State& st)
 {
-    os << "State -> " << obj.getName();
+    if (st.isFinal()) {
+        os << "  " <<  st.getName() << " [style=\"filled\" color=\"red\"]"<< std::endl;
+    }
+    Links const &links = st.getLinks();
+    for (Links::const_iterator l = links.begin(); l != links.end(); ++l) {
+        os << "  " << st.getName() << " -> "
+           << (*l).second->getName()
+           << " [label=\""
+                << (*(*l).first)
+           << "\"];" << std::endl;
+    }
     return os;
 }

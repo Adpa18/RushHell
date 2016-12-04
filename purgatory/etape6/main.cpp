@@ -3,56 +3,42 @@
 //
 
 #include <iostream>
-#include <string>
 #include <fstream>
 #include <cassert>
 #include "Matcher.hpp"
 
+FSA *genericFSA(const std::string str)
+{
+    if (str.size())
+    {
+        FSA *fsa = new FSA();
+
+        std::vector<Edge*> alphabet = Edge::makeEdges(str);
+        std::vector<State*> states;
+        for (int i = 0; i < alphabet.size() + 1; ++i) {
+            states.push_back(State::create());
+        }
+        fsa->addInitialState(states[0]);
+        for (int j = 0; j < states.size(); ++j) {
+            if (j + 1 != states.size())
+            {
+                states[j]->addLink(alphabet[j], states[j + 1]);
+            }
+            fsa->addState(states[j]);
+        }
+        states[states.size() -1]->setFinal(true);
+        return fsa;
+    }
+    return NULL;
+}
+
+FSA *criminel() {
+
+    return genericFSA("criminel");
+}
+
 FSA *mechant() {
-    Edge    *le1 = new Edge(-1);
-    Edge    *le2 = new Edge(-1);
-    Edge    *le3 = new Edge(-1);
-    Edge    *le4 = new Edge(-1);
-
-    std::vector<Edge*> mechant = Edge::makeEdges("mechant");
-    std::vector<Edge*> criminel = Edge::makeEdges("criminel");
-
-    std::vector<State*> states;
-    for (int i = 0; i < 19; ++i) {
-        states.push_back(State::create());
-    }
-
-//    Mechant
-    states[0]->addLink(le1, states[1]);
-    states[1]->addLink(mechant[0], states[2]);
-    states[2]->addLink(mechant[1], states[3]);
-    states[3]->addLink(mechant[2], states[4]);
-    states[4]->addLink(mechant[3], states[5]);
-    states[5]->addLink(mechant[4], states[6]);
-    states[6]->addLink(mechant[5], states[7]);
-    states[7]->addLink(mechant[6], states[8]);
-    states[8]->addLink(le3, states[18]);
-
-//    Criminel
-    states[0]->addLink(le2, states[9]);
-    states[9]->addLink(criminel[0], states[10]);
-    states[10]->addLink(criminel[1], states[11]);
-    states[11]->addLink(criminel[2], states[12]);
-    states[12]->addLink(criminel[3], states[13]);
-    states[13]->addLink(criminel[4], states[14]);
-    states[14]->addLink(criminel[5], states[15]);
-    states[15]->addLink(criminel[6], states[16]);
-    states[16]->addLink(criminel[7], states[17]);
-    states[17]->addLink(le4, states[18]);
-
-    states[18]->setFinal(true);
-
-    FSA *fsa = new FSA();
-    fsa->setInitial(states[0]);
-    for (std::vector<State*>::const_iterator it = states.begin(); it != states.end(); ++it) {
-        fsa->addState(*it);
-    }
-    return fsa;
+    return genericFSA("mechant");
 }
 
 FSA *abc() {
@@ -92,15 +78,14 @@ bool openFile(const std::string &filename, std::ofstream &fs)
     return fs.is_open();
 }
 
-bool exportDOT(FSA *fsa)
+bool exportDOT(FSA *fsa, const std::string &filename)
 {
     std::ofstream	fs;
 
-
-    if (!openFile("./test.dot", fs)) {
+    if (!openFile("./" + filename + ".dot", fs)) {
         return false;
     }
-    //fs << *fsa;
+    fs << (*fsa);
     return true;
 }
 
@@ -141,30 +126,68 @@ void unitTestNFAtoDFA()
     for (int i = 0; i < size; ++i) {
         matcherDFA->find(texts[i].text, nb_matches);
         assert(nb_matches == texts[i].res);
-        std::cout << "\033[1;34m" << "test " << i + 1 << "/" << size << " passed" << "\033[0m" << std::endl;
+        std::cout << "\t\033[1;34m" << "test " << i + 1 << "/" << size << " passed" << "\033[0m" << std::endl;
     }
-    std::cout << "\033[1;32mbold" << "TEST NFA to DFA OK" << "\033[0m" << std::endl;
     delete matcherDFA;
     delete dfa;
     delete nfa;
     State::freeAll();
     Edge::freeAll();
+    std::cout << "\033[1;32mbold" << "Tests NFA to DFA OK" << "\033[0m" << std::endl;
 }
 
 void unitTestExport()
 {
-    FSA *nfa = mechant();
+    std::cout << "\033[1;33m" << "Start Export DOT tests :" << "\033[0m" << std::endl << std::endl;
 
-    FSA *dfa = nfa->subset();
-    assert(exportDOT(dfa));
-    delete dfa;
-    delete nfa;
+    FSA *m = mechant();
+    FSA *c = criminel();
+
+    assert(exportDOT(m, "mechant"));
+    std::cout << "\t\033[1;34m" << "test " << 1 << "/" << 5 << " graph was exported to mechant.dot" << "\033[0m" << std::endl;
+
+    assert(exportDOT(c, "criminel"));
+    std::cout << "\t\033[1;34m" << "test " << 2 << "/" << 5 << " graph was exported to criminel.dot" << "\033[0m" << std::endl;
+
+    FSA *merge1 = FSA::MergeFSA(m, c, false);
+    assert(exportDOT(merge1, "union1"));
+    std::cout << "\t\033[1;34m" << "test " << 3 << "/" << 5 << " graph was exported to union1.dot" << "\033[0m" << std::endl;
+
+    delete m;
+    delete c;
+    delete merge1;
     State::freeAll();
     Edge::freeAll();
+    m = mechant();
+    c = criminel();
+
+    FSA *merge2 = FSA::MergeFSA(m, c, true);
+    assert(exportDOT(merge2, "union2"));
+    std::cout << "\t\033[1;34m" << "test " << 4 << "/" << 5 << " graph was exported to union2.dot" << "\033[0m" << std::endl;
+
+    delete m;
+    delete c;
+    delete merge2;
+    State::freeAll();
+    Edge::freeAll();
+    m = mechant();
+    c = criminel();
+
+    FSA *concat = FSA::ConcateFSA(m, c);
+    assert(exportDOT(concat, "concat"));
+    std::cout << "\t\033[1;34m" << "test " << 5 << "/" << 5 << " graph was exported to concat.dot" << "\033[0m" << std::endl;
+
+    delete m;
+    delete c;
+    delete concat;
+    State::freeAll();
+    Edge::freeAll();
+
+    std::cout << "\033[1;32mbold" << "Tests Export DOT OK" << "\033[0m" << std::endl;
 }
 
 int main() {
-    unitTestNFAtoDFA();
+    //unitTestNFAtoDFA();
     unitTestExport();
     return 0;
 }

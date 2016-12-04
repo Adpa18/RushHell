@@ -60,5 +60,7 @@ void printListState(std::list<State*> list, const std::string &str);
 
 void printListEdge(std::list<Edge*> list, const std::string &str);
 
+std::ostream& operator<<(std::ostream& os, const FSA& fsa);
+
 #endif //RUSHHELL_FSA_HPP
 
