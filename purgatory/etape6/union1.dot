@@ -1,21 +1,21 @@
 digraph fsa {
-  S17 -> S0 [label="lambda"];
-  S17 -> S8 [label="lambda"];
-  S0 -> S1 [label="m"];
-  S1 -> S2 [label="e"];
-  S2 -> S3 [label="c"];
-  S3 -> S4 [label="h"];
-  S4 -> S5 [label="a"];
-  S5 -> S6 [label="n"];
-  S6 -> S7 [label="t"];
-  S7 [style="filled" color="red"]
-  S8 -> S9 [label="c"];
-  S9 -> S10 [label="r"];
-  S10 -> S11 [label="i"];
-  S11 -> S12 [label="m"];
-  S12 -> S13 [label="i"];
-  S13 -> S14 [label="n"];
-  S14 -> S15 [label="e"];
-  S15 -> S16 [label="l"];
-  S16 [style="filled" color="red"]
+  S36 -> S19 [label="lambda"];
+  S36 -> S27 [label="lambda"];
+  S19 -> S20 [label="m"];
+  S20 -> S21 [label="e"];
+  S21 -> S22 [label="c"];
+  S22 -> S23 [label="h"];
+  S23 -> S24 [label="a"];
+  S24 -> S25 [label="n"];
+  S25 -> S26 [label="t"];
+  S26 [style="filled" color="red"]
+  S27 -> S28 [label="c"];
+  S28 -> S29 [label="r"];
+  S29 -> S30 [label="i"];
+  S30 -> S31 [label="m"];
+  S31 -> S32 [label="i"];
+  S32 -> S33 [label="n"];
+  S33 -> S34 [label="e"];
+  S34 -> S35 [label="l"];
+  S35 [style="filled" color="red"]
 }

@@ -88,9 +88,9 @@ std::list<State*> FSA::move(State *state, Edge *edge) const {
 FSA* FSA::subset() const {
     FSA *dfa = new FSA();
     Closure *initial = new Closure(closure(m_initial_state));
-    LState const &cl_states = initial->GetClosure();
+    LState const &cl_st = initial->GetClosure();
 
-    for (LState_it c = cl_states.begin(); c != cl_states.end(); ++c) {
+    for (LState_it c = cl_st.begin(); c != cl_st.end(); ++c) {
         dfa->addInitialState(*c);
     }
     std::queue<Closure *> process;
@@ -181,7 +181,7 @@ FSA *FSA::MergeClose(FSA *const f1, FSA *const f2)
 
     State *start = State::create();
     State *end = State::create();
-    end->setFinal(true);
+
 
     Edge    *le1 = new Edge(-1);
     Edge    *le2 = new Edge(-1);
@@ -192,16 +192,21 @@ FSA *FSA::MergeClose(FSA *const f1, FSA *const f2)
     start->addLink(le2, *f2->getInitialStates().begin());
 
     fsa->addInitialState(start);
+    fsa->setInitial(start);
     fsa->addState(start);
+
+    fsa->addState(end);
 
     LState const &states_f1 = f1->getStates();
     LState const &states_f2 = f2->getStates();
 
+    end->setFinal(true);
     State *final = NULL;
     for (LState_it st = states_f1.begin(); st != states_f1.end() ; ++st) {
         fsa->addState(*st);
         if ((*st)->isFinal())
         {
+            (*st)->setFinal(false);
             final = *st;
             break;
         }
@@ -214,6 +219,7 @@ FSA *FSA::MergeClose(FSA *const f1, FSA *const f2)
         fsa->addState(*st);
         if ((*st)->isFinal())
         {
+            (*st)->setFinal(false);
             final = *st;
             break;
         }
@@ -222,7 +228,6 @@ FSA *FSA::MergeClose(FSA *const f1, FSA *const f2)
         final->addLink(le4, end);
     else
         delete le4;
-
     return fsa;
 }
 
@@ -241,6 +246,7 @@ FSA *FSA::MergeOpen(FSA *const f1, FSA *const f2)
     LState const &states_f1 = f1->getStates();
     LState const &states_f2 = f2->getStates();
 
+    fsa->setInitial(start);
     fsa->addInitialState(start);
     fsa->addState(start);
     for (LState_it st = states_f1.begin(); st != states_f1.end() ; ++st) {

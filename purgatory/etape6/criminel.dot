@@ -1,11 +1,11 @@
 digraph fsa {
-  S8 -> S9 [label="c"];
-  S9 -> S10 [label="r"];
-  S10 -> S11 [label="i"];
-  S11 -> S12 [label="m"];
-  S12 -> S13 [label="i"];
-  S13 -> S14 [label="n"];
-  S14 -> S15 [label="e"];
-  S15 -> S16 [label="l"];
-  S16 [style="filled" color="red"]
+  S27 -> S28 [label="c"];
+  S28 -> S29 [label="r"];
+  S29 -> S30 [label="i"];
+  S30 -> S31 [label="m"];
+  S31 -> S32 [label="i"];
+  S32 -> S33 [label="n"];
+  S33 -> S34 [label="e"];
+  S34 -> S35 [label="l"];
+  S35 [style="filled" color="red"]
 }

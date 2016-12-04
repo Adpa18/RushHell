@@ -92,10 +92,13 @@ bool exportDOT(FSA *fsa, const std::string &filename)
 void unitTestNFAtoDFA()
 {
 
-    FSA *nfa = mechant();
+    FSA *m = mechant();
+    FSA *c = criminel();
     int nb_matches = 0;
 
-    FSA *dfa = nfa->subset();
+    FSA *merge = FSA::MergeFSA(m, c, true);
+    FSA *dfa = merge->subset();
+    exportDOT(merge, "merge");
     Matcher *matcherDFA = new Matcher(*dfa);
 
     struct test {
@@ -130,7 +133,9 @@ void unitTestNFAtoDFA()
     }
     delete matcherDFA;
     delete dfa;
-    delete nfa;
+    delete c;
+    delete m;
+    delete merge;
     State::freeAll();
     Edge::freeAll();
     std::cout << "\033[1;32mbold" << "Tests NFA to DFA OK" << "\033[0m" << std::endl;
@@ -187,7 +192,7 @@ void unitTestExport()
 }
 
 int main() {
-    //unitTestNFAtoDFA();
+    unitTestNFAtoDFA();
     unitTestExport();
     return 0;
 }

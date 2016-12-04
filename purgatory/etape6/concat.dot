@@ -1,19 +1,19 @@
 digraph fsa {
-  S37 -> S38 [label="m"];
-  S38 -> S39 [label="e"];
-  S39 -> S40 [label="c"];
-  S40 -> S41 [label="h"];
-  S41 -> S42 [label="a"];
-  S42 -> S43 [label="n"];
-  S43 -> S44 [label="t"];
-  S44 -> S45 [label="lambda"];
-  S45 -> S46 [label="c"];
-  S46 -> S47 [label="r"];
-  S47 -> S48 [label="i"];
-  S48 -> S49 [label="m"];
-  S49 -> S50 [label="i"];
-  S50 -> S51 [label="n"];
-  S51 -> S52 [label="e"];
-  S52 -> S53 [label="l"];
-  S53 [style="filled" color="red"]
+  S56 -> S57 [label="m"];
+  S57 -> S58 [label="e"];
+  S58 -> S59 [label="c"];
+  S59 -> S60 [label="h"];
+  S60 -> S61 [label="a"];
+  S61 -> S62 [label="n"];
+  S62 -> S63 [label="t"];
+  S63 -> S64 [label="lambda"];
+  S64 -> S65 [label="c"];
+  S65 -> S66 [label="r"];
+  S66 -> S67 [label="i"];
+  S67 -> S68 [label="m"];
+  S68 -> S69 [label="i"];
+  S69 -> S70 [label="n"];
+  S70 -> S71 [label="e"];
+  S71 -> S72 [label="l"];
+  S72 [style="filled" color="red"]
 }
