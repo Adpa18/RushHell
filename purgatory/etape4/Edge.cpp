@@ -27,3 +27,9 @@ bool Edge::operator==(Edge const &edge) const {
 char Edge::getChar() const {
     return m_c;
 }
+
+std::ostream& operator<<(std::ostream& os, const Edge& obj)
+{
+    os << "Edge -> " << obj.getChar();
+    return os;
+}

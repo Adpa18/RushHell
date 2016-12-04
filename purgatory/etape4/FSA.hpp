@@ -7,6 +7,7 @@
 
 #include <list>
 #include "State.hpp"
+#include "Closure.h"
 
 class FSA {
 public:
@@ -16,11 +17,14 @@ public:
 private:
     std::list<State*>   m_states;
     std::list<State*>   m_initial_states;
+    State*   m_initial_state;
 
 public:
     void    addState(State *state);
     void    addInitialState(State *state);
+    void    setInitial(State * const state);
     std::list<State*> const &getInitialStates() const;
+    State* const &getInitial() const;
     std::list<State*> const &getStates() const;
 
 public:
@@ -37,7 +41,7 @@ public:
     FSA                 *subset() const;
 
 private:
-    bool                listNotInList(std::list<State*> l1, std::list<State*> l2) const;
+    bool                listNotInList(std::list<State*> const &l1, std::list<State*> const &l2) const;
 };
 
 void printListState(std::list<State*> list, const std::string &str);

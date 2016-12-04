@@ -53,7 +53,7 @@ FSA *mechant() {
     states[18]->setFinal(true);
 
     FSA *fsa = new FSA();
-    fsa->addInitialState(states[0]);
+    fsa->setInitial(states[0]);
     for (std::vector<State*>::const_iterator it = states.begin(); it != states.end(); ++it) {
         fsa->addState(*it);
     }
@@ -75,7 +75,7 @@ FSA *abc() {
     State   *s4 = State::create();
 
     FSA *fsa = new FSA();
-    fsa->addInitialState(s1);
+    fsa->setInitial(s1);
     s3->setFinal(true);
     s1->addLink(a1, s2);
     s1->addLink(c1, s4);
@@ -96,7 +96,7 @@ int main(int ac, char **av) {
         return 1;
     }
 
-    FSA *fsa = abc();
+    FSA *fsa = mechant();
 
     int nb_matches;
     bool is;
@@ -105,11 +105,11 @@ int main(int ac, char **av) {
 //    std::cout << std::boolalpha << is << " " << nb_matches << std::endl;
 
     FSA *dfa = fsa->subset();
-//    Matcher *matcherDFA = new Matcher(*dfa);
-//
-//    for (int i = 1; i < ac; ++i) {
-//        is = matcherDFA->find(av[i], nb_matches);
-//        std::cout << std::boolalpha << is << " " << nb_matches << std::endl;
-//    }
+    Matcher *matcherDFA = new Matcher(*dfa);
+
+    for (int i = 1; i < ac; ++i) {
+        is = matcherDFA->find(av[i], nb_matches);
+        std::cout << std::boolalpha << is << " " << nb_matches << std::endl;
+    }
     return 0;
 }

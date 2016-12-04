@@ -28,27 +28,32 @@ bool Matcher::find(const std::string &str, int &nb_matches) const {
             std::string build = "";
             State *current_state = *initial;
 
-            for (std::vector<Edge*>::const_iterator it = str_edges.begin(); it != str_edges.end(); ++it) {
+            std::cout << *current_state << std::endl;
+            std::vector<Edge*>::const_iterator it = str_edges.begin();
+            while (it != str_edges.end()) {
                 Links const &links = current_state->getLinks();
-                std::cout << "Current " << current_state->getName() << std::endl;
                 for (Links::const_iterator link = links.begin(); link != links.end(); ++link) {
-                    std::cout << "link " << (*it)->getChar() << *it << std::endl;
+                    //std::cout << **it << "---" << *(link->first) << std::endl;
                     if (**it == *(link->first)) {
-                        std::cout << (*it)->getChar() << std::endl;
                         build += link->first->getChar();
                         current_state = link->second;
                         break;
                     }
                 }
                 if (current_state->isFinal()) {
+                    std::cout << build << std::endl;
                     ++nb_matches;
                     current_state = *initial;
                     build.clear();
                 }
+                ++it;
+                //if (it == str_edges.end())
+                //    return true;
             }
 
         }
     }
+    std::cout << std::endl;
     return true;
 }
 

@@ -5,6 +5,7 @@
 #include <queue>
 #include <algorithm>
 #include <iostream>
+#include <list>
 #include "FSA.hpp"
 
 FSA::FSA() {
@@ -40,13 +41,16 @@ State   *FSA::operator[](std::string const &name) const {
             return (*it);
         }
     }
-    return nullptr;
+    return NULL;
 }
 
 std::list<State*> FSA::closure(std::list<State *> const &states) const {
     std::list<State*>   clinks;
     for (std::list<State*>::const_iterator it = states.begin(); it != states.end(); ++it) {
-        clinks.merge(closure(*it));
+        LState  l = closure(*it);
+        for (LState_it i = l.begin(); i != l.end() ; ++i) {
+            clinks.push_back(*i);
+        }
     }
     return clinks;
 }
@@ -86,31 +90,116 @@ std::list<State*> FSA::move(State *state, Edge *edge) const {
 }
 
 FSA* FSA::subset() const {
+    //df a_states ← 0 {It will hold all DFA states}
     FSA *dfa = new FSA();
 
-    typedef std::map<State*, std::pair<std::map<Edge*, std::list<State*>>, std::list<State*>>> Coffee;
+    //initial ← closure(S0)
+    Closure *initial = new Closure(closure(m_initial_state));
+    LState const &cl_states = initial->GetClosure();
 
-    Coffee array;
+    for (LState_it c = cl_states.begin(); c != cl_states.end(); ++c) {
+        dfa->addInitialState(*c);
+    }
+    //processing ← initial {processing is a kind of queue}
+    std::queue<Closure *> process;
+    process.push(initial);
 
-    for (std::list<State*>::const_iterator it = m_states.begin(); it != m_states.end(); ++it) {
-        array[*it].second = closure(*it);
-        std::list<Edge*> edges = (*it)->getEdges();
-        for (std::list<Edge*>::const_iterator edge = edges.begin(); edge != edges.end(); ++edge) {
-            array[*it].first[*edge] = move(*it, *edge);
+    //while processing is not empty do
+    while (!process.empty()) {
+        LState const &lstate = process.front()->GetClosure();
+        //current ← pop(processing)
+        process.pop();
+        for (LState_it cl = lstate.begin(); cl != lstate.end(); ++cl) {
+            if (cl == lstate.begin())
+                dfa->setInitial(*cl);
+            State *current = *cl;
+            std::cout << "Current -> "<< *current << std::endl;
+            LEdge const &le = current->getEdges();
+            //for each edge in alphabet do
+            for (LEdge_it e = le.begin(); e != le.end() ; ++e) {
+                std::cout << **e << std::endl;
+                //states ← move(current, edge)
+                LState const &states = move(current, *e);
+                for (LState_it t = states.begin(); t != states.end() ; ++t) {
+                    std::cout << *(*t) << std::endl;
+                }
+                //closure ← closure(states)
+                Closure *curr_cl = new Closure(closure(states));
+                std::cout << "\t" << *curr_cl << std::endl;
+                //if closure not in df a_states then
+                if (listNotInList(dfa->getStates(), curr_cl->GetClosure()))
+                {
+                    LState const &cl_states = curr_cl->GetClosure();
+                    for (LState_it c = cl_states.begin(); c != cl_states.end(); ++c) {
+                        //Add closure to df a_states
+                        dfa->addState(*c);
+                    }
+                    //Push closure to processing
+                    if (curr_cl->GetClosure().size())
+                        process.push(curr_cl);
+                }
+                LState const &cl_states = curr_cl->GetClosure();
+                for (LState_it c = cl_states.begin(); c != cl_states.end(); ++c) {
+                    //Add edge from current to closure
+                    current->addLink(*e, (*c));
+                }
+            }
         }
     }
 
-    for (Coffee::const_iterator it = array.begin(); it != array.end(); ++it) {
-        std::cout << (*it).first->getName() << std::endl;
-        for (std::map<Edge*, std::list<State*>>::const_iterator aa = (*it).second.first.begin(); aa != (*it).second.first.end(); ++aa) {
-            std::cout << "Edge " << aa->first->getChar() << std::endl;
-            printListState(aa->second, "move");
-        }
-        printListState((*it).second.second, "closures");
-    }
+    return dfa;
+//    typedef std::map<State*, std::pair<std::map<Edge*, std::list<State*> >, std::list<State*> > > Coffee;
+//
+//    Coffee array;
+//
+//    for (std::list<State*>::const_iterator it = m_states.begin(); it != m_states.end(); ++it) {
+//        array[*it].second = closure(*it);
+//        std::list<Edge*> edges = (*it)->getEdges();
+//        for (std::list<Edge*>::const_iterator edge = edges.begin(); edge != edges.end(); ++edge) {
+//            array[*it].first[*edge] = move(*it, *edge);
+//        }
+//    }
+//
+//    for (Coffee::const_iterator it = array.begin(); it != array.end(); ++it) {
+//        std::cout << (*it).first->getName() << std::endl;
+//        for (std::map<Edge*, std::list<State*> >::const_iterator aa = (*it).second.first.begin(); aa != (*it).second.first.end(); ++aa) {
+//            std::cout << "Edge " << aa->first->getChar() << std::endl;
+//            printListState(aa->second, "move");
+//        }
+//        printListState((*it).second.second, "closures");
+//    }
+//
+//    std::pair<std::map<Edge *, std::list<State *> >, std::list<State *> > &first = array[*m_initial_states.begin()];
+//    std::queue<std::list<State*> > process;
+//    process.push(m_initial_states);
+//    std::cout << "Process ...\n\n\n" << std::endl;
+//    std::list<std::list<State*> > table_verite;
+//    table_verite.push_back(m_initial_states);
+//    while (!process.empty())
+//    {
+//        std::list<State*> l = process.front();
+//
+//        process.pop();
+//        for (std::list<State*>::const_iterator it = l.begin(); it != l.end(); ++it) {
+//            std::cout << (*it)->getName() << std::endl;
+//            for (std::map<Edge*, std::list<State*> >::const_iterator aa = array[*it].first.begin(); aa != array[*it].first.end(); ++aa) {
+//                std::list<State*> cl = closure((*aa).second);
+//                printListState(cl, "final closure");
 
-    std::pair<std::map<Edge *, std::list<State *>>, std::list<State *>> &first = array[*m_initial_states.begin()];
+//                bool ret = true;
+//                for (std::list<std::list<State*> >::const_iterator tab = table_verite.begin(); tab != table_verite.end(); ++tab) {
+//                    ret = listNotInList(*tab, cl);
+//                    if (!ret) {
+//                        break;
+//                    }
+//                }
+//                if (ret) {
+//                    process.push(cl);
+//                }
 
+//            }
+//        }
+//    }
 
 //    std::queue<State*> process;
 //    std::list<State*>   init_list = closure(m_initial_states);
@@ -148,16 +237,24 @@ FSA* FSA::subset() const {
 //            }
 //        }
 //    }
-    return dfa;
+    //return dfa;
 }
 
-bool FSA::listNotInList(std::list<State *> l1, std::list<State *> l2) const {
+bool FSA::listNotInList(std::list<State *> const &l1, std::list<State *> const &l2) const {
     for (std::list<State*>::const_iterator it = l1.begin(); it != l1.end(); ++it) {
         if (std::find(l2.begin(), l2.end(), *it) != l2.end()) {
             return false;
         }
     }
     return true;
+}
+
+void FSA::setInitial(State *const state) {
+    m_initial_state = state;
+}
+
+State *const &FSA::getInitial() const {
+    return m_initial_state;
 }
 
 void printListState(std::list<State*> list, const std::string &str) {

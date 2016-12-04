@@ -5,6 +5,7 @@
 #ifndef RUSHHELL_STATE_HPP
 #define RUSHHELL_STATE_HPP
 
+#include <string>
 #include <cstring>
 #include <map>
 #include <list>
@@ -44,5 +45,10 @@ public:
     State           *operator[](Edge *edge);
     std::list<Edge*>    getEdges() const;
 };
+
+std::ostream& operator<<(std::ostream& os, const State& obj);
+
+typedef std::list<State*> LState;
+typedef std::list<State*>::const_iterator LState_it;
 
 #endif //RUSHHELL_STATE_HPP

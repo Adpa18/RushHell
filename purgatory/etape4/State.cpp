@@ -2,12 +2,17 @@
 // Created by wery_a on 03/12/16.
 //
 
+
+#include <sstream>
 #include "State.hpp"
 
-size_t State::m_id = 1;
+size_t State::m_id = 0;
 
 State::State(): m_final(false) {
-    m_name = "S" + std::to_string(m_id);
+
+    std::stringstream ss;
+    ss << "S" << m_id;
+    m_name = ss.str();
     ++m_id;
 }
 
@@ -57,4 +62,10 @@ std::list<Edge *> State::getEdges() const {
         edges.push_back(it->first);
     }
     return edges;
+}
+
+std::ostream& operator<<(std::ostream& os, const State& obj)
+{
+    os << "State -> " << obj.getName();
+    return os;
 }
