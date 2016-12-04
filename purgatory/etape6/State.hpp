@@ -21,6 +21,7 @@ private:
 
 
 public:
+    State(const std::string &name);
     static void freeAll();
     virtual ~State();
 
@@ -32,6 +33,7 @@ private:
 
 public:
     bool    operator==(std::string const &name) const;
+    //bool    IsClosure(const std::string &str) const;
 
 public:
     void                setName(std::string const &name);

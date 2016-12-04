@@ -1,7 +1,6 @@
 digraph fsa {
-  S54 -> S45 [label="lambda"];
   S54 -> S37 [label="lambda"];
-  S55 [style="filled" color="red"]
+  S54 -> S45 [label="lambda"];
   S37 -> S38 [label="m"];
   S38 -> S39 [label="e"];
   S39 -> S40 [label="c"];
@@ -19,4 +18,5 @@ digraph fsa {
   S51 -> S52 [label="e"];
   S52 -> S53 [label="l"];
   S53 -> S55 [label="lambda"];
+  S55 [style="filled" color="red"]
 }

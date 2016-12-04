@@ -18,14 +18,21 @@ ExpressionParser::ExpressionParser(const std::string &alphabet)
     std::map<std::string, std::string> map;
     FSA *res = NULL;
     if (parse.readExpr(map)) {
-        FSA *last = NULL;
-
+        //FSA *last = NULL;
         for (std::map<std::string, std::string>::const_iterator i = map.begin(); i != map.end(); ++i) {
+            std::cout << (*i).second << std::endl;
             FSA *tmp = FSA::genericFSA((*i).second);
-            if (last != NULL)
-                res = FSA::MergeFSA(last, tmp, true);
-            last = tmp;
+            if (res != NULL && tmp != NULL)
+            {
+                res = FSA::MergeFSA(res, tmp, true);
+                FSA::exportDOT(res, (*i).second);
+                std::cout << "coucou" << std::endl;
+            }
+            else if (res == NULL)
+                res = tmp;
         }
     }
-    FSA::exportDOT(res, "ameno");
+
+    FSA *dfa = res->subset();
+    FSA::exportDOT(dfa, "ameno");
 }

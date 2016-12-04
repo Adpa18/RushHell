@@ -20,15 +20,15 @@ public:
 
 private:
     std::list<State*>   m_states;
-    std::list<State*>   m_initial_states;
+    //std::list<State*>   m_initial_states;
     State*   m_initial_state;
 
 public:
     void    addState(State *state);
-    void    addInitialState(State *state);
+    //void    addInitialState(State *state);
     void    setInitial(State * const state);
-    std::list<State*> const &getInitialStates() const;
-    State* const &getInitial() const;
+    //std::list<State*> const &getInitialStates() const;
+    State *getInitial() const;
     std::list<State*> const &getStates() const;
 
 public:
@@ -40,6 +40,7 @@ public:
 
 public:
     std::list<State*>   move(State *state, Edge *edge) const;
+    std::list<State*>   move(LState const &, Edge *edge) const;
 
 public:
     FSA                 *subset() const;

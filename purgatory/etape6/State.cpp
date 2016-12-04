@@ -84,6 +84,10 @@ void State::freeAll()
     }
 }
 
+State::State(const std::string &name) : m_final(false) {
+    m_name = name;
+}
+
 std::ostream& operator<<(std::ostream& os, const State& st)
 {
     if (st.isFinal()) {
