@@ -3,6 +3,7 @@
 //
 
 #include "Inspector.hpp"
+//#include "bind/bind.hpp"
 
 struct test{};
 struct lol{};
