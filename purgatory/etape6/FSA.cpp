@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <iostream>
 #include <list>
+#include <fstream>
 #include "FSA.hpp"
 
 FSA::FSA() {
@@ -279,4 +280,46 @@ void printListEdge(std::list<Edge*> list, const std::string &str) {
     for (std::list<Edge*>::const_iterator it = list.begin(); it != list.end(); ++it) {
         std::cout << str << " " << (*it)->getChar() << std::endl;
     }
+}
+
+FSA *FSA::genericFSA(const std::string str)
+{
+    if (str.size())
+    {
+        FSA *fsa = new FSA();
+
+        std::vector<Edge*> alphabet = Edge::makeEdges(str);
+        std::vector<State*> states;
+        for (int i = 0; i < alphabet.size() + 1; ++i) {
+            states.push_back(State::create());
+        }
+        fsa->addInitialState(states[0]);
+        for (int j = 0; j < states.size(); ++j) {
+            if (j + 1 != states.size())
+            {
+                states[j]->addLink(alphabet[j], states[j + 1]);
+            }
+            fsa->addState(states[j]);
+        }
+        states[states.size() -1]->setFinal(true);
+        return fsa;
+    }
+    return NULL;
+}
+
+bool FSA::openFile(const std::string &filename, std::ofstream &fs)
+{
+    fs.open(filename.c_str());
+    return fs.is_open();
+}
+
+bool FSA::exportDOT(FSA *fsa, const std::string &filename)
+{
+    std::ofstream	fs;
+
+    if (!openFile("./" + filename + ".dot", fs)) {
+        return false;
+    }
+    fs << (*fsa);
+    return true;
 }

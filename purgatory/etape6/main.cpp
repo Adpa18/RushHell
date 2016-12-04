@@ -6,39 +6,16 @@
 #include <fstream>
 #include <cassert>
 #include "Matcher.hpp"
-
-FSA *genericFSA(const std::string str)
-{
-    if (str.size())
-    {
-        FSA *fsa = new FSA();
-
-        std::vector<Edge*> alphabet = Edge::makeEdges(str);
-        std::vector<State*> states;
-        for (int i = 0; i < alphabet.size() + 1; ++i) {
-            states.push_back(State::create());
-        }
-        fsa->addInitialState(states[0]);
-        for (int j = 0; j < states.size(); ++j) {
-            if (j + 1 != states.size())
-            {
-                states[j]->addLink(alphabet[j], states[j + 1]);
-            }
-            fsa->addState(states[j]);
-        }
-        states[states.size() -1]->setFinal(true);
-        return fsa;
-    }
-    return NULL;
-}
+#include "Parser.hpp"
+#include "ExpressionParser.hpp"
 
 FSA *criminel() {
 
-    return genericFSA("criminel");
+    return FSA::genericFSA("criminel");
 }
 
 FSA *mechant() {
-    return genericFSA("mechant");
+    return FSA::genericFSA("mechant");
 }
 
 FSA *abc() {
@@ -72,23 +49,6 @@ FSA *abc() {
     return fsa;
 }
 
-bool openFile(const std::string &filename, std::ofstream &fs)
-{
-    fs.open(filename.c_str());
-    return fs.is_open();
-}
-
-bool exportDOT(FSA *fsa, const std::string &filename)
-{
-    std::ofstream	fs;
-
-    if (!openFile("./" + filename + ".dot", fs)) {
-        return false;
-    }
-    fs << (*fsa);
-    return true;
-}
-
 void unitTestNFAtoDFA()
 {
 
@@ -98,7 +58,7 @@ void unitTestNFAtoDFA()
 
     FSA *merge = FSA::MergeFSA(m, c, true);
     FSA *dfa = merge->subset();
-    exportDOT(merge, "merge");
+    FSA::exportDOT(merge, "merge");
     Matcher *matcherDFA = new Matcher(*dfa);
 
     struct test {
@@ -148,14 +108,14 @@ void unitTestExport()
     FSA *m = mechant();
     FSA *c = criminel();
 
-    assert(exportDOT(m, "mechant"));
+    assert(FSA::exportDOT(m, "mechant"));
     std::cout << "\t\033[1;34m" << "test " << 1 << "/" << 5 << " graph was exported to mechant.dot" << "\033[0m" << std::endl;
 
-    assert(exportDOT(c, "criminel"));
+    assert(FSA::exportDOT(c, "criminel"));
     std::cout << "\t\033[1;34m" << "test " << 2 << "/" << 5 << " graph was exported to criminel.dot" << "\033[0m" << std::endl;
 
     FSA *merge1 = FSA::MergeFSA(m, c, false);
-    assert(exportDOT(merge1, "union1"));
+    assert(FSA::exportDOT(merge1, "union1"));
     std::cout << "\t\033[1;34m" << "test " << 3 << "/" << 5 << " graph was exported to union1.dot" << "\033[0m" << std::endl;
 
     delete m;
@@ -167,7 +127,7 @@ void unitTestExport()
     c = criminel();
 
     FSA *merge2 = FSA::MergeFSA(m, c, true);
-    assert(exportDOT(merge2, "union2"));
+    assert(FSA::exportDOT(merge2, "union2"));
     std::cout << "\t\033[1;34m" << "test " << 4 << "/" << 5 << " graph was exported to union2.dot" << "\033[0m" << std::endl;
 
     delete m;
@@ -179,7 +139,7 @@ void unitTestExport()
     c = criminel();
 
     FSA *concat = FSA::ConcateFSA(m, c);
-    assert(exportDOT(concat, "concat"));
+    assert(FSA::exportDOT(concat, "concat"));
     std::cout << "\t\033[1;34m" << "test " << 5 << "/" << 5 << " graph was exported to concat.dot" << "\033[0m" << std::endl;
 
     delete m;
@@ -191,8 +151,15 @@ void unitTestExport()
     std::cout << "\033[1;32mbold" << "Tests Export DOT OK" << "\033[0m" << std::endl;
 }
 
+void unitTestExpressionParser()
+{
+    ExpressionParser exp("(mechant)|(criminel)");
+}
+
 int main() {
     unitTestNFAtoDFA();
     unitTestExport();
+    unitTestExpressionParser();
+
     return 0;
 }

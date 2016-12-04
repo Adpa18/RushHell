@@ -50,10 +50,13 @@ private:
 public:
     static FSA *ConcateFSA(FSA * const f1, FSA * const f2);
     static FSA *MergeFSA(FSA * const f1, FSA * const f2, bool merge_end);
+    static FSA *genericFSA(const std::string str);
+    static bool exportDOT(FSA *fsa, const std::string &filename);
 
 private:
     static FSA *MergeClose(FSA * const f1, FSA * const f2);
     static FSA *MergeOpen(FSA * const f1, FSA * const f2);
+    static bool openFile(const std::string &filename, std::ofstream &fs);
 };
 
 void printListState(std::list<State*> list, const std::string &str);
