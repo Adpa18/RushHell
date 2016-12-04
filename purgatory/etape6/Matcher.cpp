@@ -21,7 +21,7 @@ bool Matcher::find(const std::string &str) const {
 bool Matcher::find(const std::string &str, int &nb_matches) const {
     nb_matches = 0;
 
-    std::vector<Edge*> str_edges = makeEdges(str);
+    std::vector<Edge*> str_edges = Edge::makeEdges(str);
     std::list<State*> inits = m_fsa.getInitialStates();
     for (std::list<State*>::const_iterator initial = inits.begin(); initial != inits.end(); ++initial) {
         if (*initial) {
@@ -59,12 +59,4 @@ bool Matcher::find(const std::string &str, int &nb_matches) const {
     }
     //std::cout << nb_matches << std::endl;
     return true;
-}
-
-std::vector<Edge*> Matcher::makeEdges(std::string const &str) const {
-    std::vector<Edge*> str_edges;
-    for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) {
-        str_edges.push_back(new Edge(*it));
-    }
-    return str_edges;
 }

@@ -6,6 +6,8 @@
 #include <sstream>
 #include "State.hpp"
 
+std::list<State*> State::_all;
+
 size_t State::m_id = 0;
 
 State::State(): m_final(false) {
@@ -41,7 +43,9 @@ bool State::isFinal() const {
 }
 
 State* State::create() {
-    return new State();
+    State *tmp = new State();
+    _all.push_back(tmp);
+    return tmp;
 }
 
 void State::addLink(Edge *edge, State *state) {
@@ -62,6 +66,21 @@ std::list<Edge *> State::getEdges() const {
         edges.push_back(it->first);
     }
     return edges;
+}
+
+void State::deleteEdges() {
+
+}
+
+void State::freeAll()
+{
+    std::list<State*>::iterator states = _all.begin();
+    while (states != _all.end()) {
+        State *tmp = *states;
+        _all.erase(states++);
+        if (tmp != NULL)
+            delete tmp;
+    }
 }
 
 std::ostream& operator<<(std::ostream& os, const State& obj)

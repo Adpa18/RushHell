@@ -8,22 +8,14 @@
 #include <cassert>
 #include "Matcher.hpp"
 
-std::vector<Edge*>  makeEdges(std::string const &str) {
-    std::vector<Edge*> str_edges;
-    for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) {
-        str_edges.push_back(new Edge(*it));
-    }
-    return str_edges;
-}
-
 FSA *mechant() {
     Edge    *le1 = new Edge(-1);
     Edge    *le2 = new Edge(-1);
     Edge    *le3 = new Edge(-1);
     Edge    *le4 = new Edge(-1);
 
-    std::vector<Edge*> mechant = makeEdges("mechant");
-    std::vector<Edge*> criminel = makeEdges("criminel");
+    std::vector<Edge*> mechant = Edge::makeEdges("mechant");
+    std::vector<Edge*> criminel = Edge::makeEdges("criminel");
 
     std::vector<State*> states;
     for (int i = 0; i < 19; ++i) {
@@ -114,19 +106,18 @@ bool exportDOT(FSA *fsa)
 
 void unitTestNFAtoDFA()
 {
-    struct test
-    {
+
+    FSA *nfa = mechant();
+    int nb_matches = 0;
+
+    FSA *dfa = nfa->subset();
+    Matcher *matcherDFA = new Matcher(*dfa);
+
+    struct test {
         std::string const &text;
         int res;
     };
-    FSA *fsa = mechant();
-
-    int nb_matches = 0;
-
-    FSA *dfa = fsa->subset();
-    Matcher *matcherDFA = new Matcher(*dfa);
-
-    const size_t size = 15;
+    const size_t size = 16;
     const test texts[size] = {
             {"mechantmechant", 2},              //1
             {"mechantcriminel", 2},             //2
@@ -143,6 +134,7 @@ void unitTestNFAtoDFA()
             {"mechannnntcriminellmechant", 2},  //13
             {"mechantmecsdDQSqhant", 1},        //14
             {"criminelmechantmechant", 3},      //15
+            {"", 0}
     };
 
     std::cout << "\033[1;33m" << "Start NFA to DFA tests :" << "\033[0m" << std::endl << std::endl;
@@ -152,6 +144,11 @@ void unitTestNFAtoDFA()
         std::cout << "\033[1;34m" << "test " << i + 1 << "/" << size << " passed" << "\033[0m" << std::endl;
     }
     std::cout << "\033[1;32mbold" << "TEST NFA to DFA OK" << "\033[0m" << std::endl;
+    delete matcherDFA;
+    delete dfa;
+    delete nfa;
+    State::freeAll();
+    Edge::freeAll();
 }
 
 void unitTestExport()
@@ -160,6 +157,10 @@ void unitTestExport()
 
     FSA *dfa = nfa->subset();
     assert(exportDOT(dfa));
+    delete dfa;
+    delete nfa;
+    State::freeAll();
+    Edge::freeAll();
 }
 
 int main() {

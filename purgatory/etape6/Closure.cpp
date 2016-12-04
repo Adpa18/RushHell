@@ -5,11 +5,14 @@
 #include <iostream>
 #include "Closure.h"
 
+std::list<Closure*> Closure::_all;
+
 Closure::Closure(const LState &lstate) {
 
     for (LState_it cl = lstate.begin(); cl != lstate.end(); ++cl) {
         m_closure.push_back(*cl);
     }
+    _all.push_back(this);
 }
 
 Closure::Closure(State *state) {
@@ -19,6 +22,16 @@ Closure::Closure(State *state) {
 
 const LState &Closure::GetClosure() const {
     return m_closure;
+}
+
+void Closure::freeAll() {
+    std::list<Closure*>::iterator cl = _all.begin();
+    while (cl != _all.end()) {
+        Closure *tmp = *cl;
+        _all.erase(cl++);
+        if (tmp != NULL)
+            delete tmp;
+    }
 }
 
 std::ostream& operator<<(std::ostream& os, Closure& obj) {

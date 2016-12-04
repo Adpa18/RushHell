@@ -13,7 +13,31 @@ FSA::FSA() {
 }
 
 FSA::~FSA() {
-
+    std::list<State*>::iterator states = m_initial_states.begin();
+//    while (states != m_initial_states.end())
+//    {
+//        if (*states != NULL)
+//        {
+//            (*states)->deleteEdges();
+//            m_initial_states.erase(states++);
+//        }
+//    }
+//    states = m_states.begin();
+//    while (states != m_states.end())
+//    {
+//        State *tmp = NULL;
+//        if (*states != NULL)
+//        {
+//            (*states)->deleteEdges();
+//            tmp = *states;
+//        }
+//        m_states.erase(states++);
+//        if (tmp != NULL)
+//        {
+//            std::cout << tmp << std::endl;
+//            delete tmp;
+//        }
+//    }
 }
 
 void FSA::addState(State *state) {
@@ -140,7 +164,7 @@ FSA* FSA::subset() const {
             }
         }
     }
-
+    Closure::freeAll();
     return dfa;
 //    typedef std::map<State*, std::pair<std::map<Edge*, std::list<State*> >, std::list<State*> > > Coffee;
 //
