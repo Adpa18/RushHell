@@ -84,7 +84,7 @@ void unitTestNFAtoDFA()
     };
 
     std::cout << "\033[1;33m" << "Start NFA to DFA tests :" << "\033[0m" << std::endl << std::endl;
-    for (int i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; ++i) {
         matcherDFA->find(texts[i].text, nb_matches);
         assert(nb_matches == texts[i].res);
         std::cout << "\t\033[1;34m" << "test " << i + 1 << "/" << size << " passed" << "\033[0m" << std::endl;

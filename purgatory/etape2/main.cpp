@@ -46,8 +46,10 @@ void    find_string(const std::string &str)
 
 int main(int ac, char **av)
 {
-    if (ac < 2)
+    if (ac < 2) {
+        std::cerr << "Usage: ./test_fsa str" << std::endl;
         return 1;
+    }
     find_string(av[1]);
     return 0;
 }

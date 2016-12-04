@@ -62,6 +62,7 @@ bool ProducterStream::loadString(const std::string &str)
 {
     is_string = true;
     m_str = str;
+    return true;
 }
 
 

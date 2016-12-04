@@ -72,7 +72,7 @@ std::list<State*> FSA::closure(State *state) const {
 }
 
 std::list<State*> FSA::move(State *state, Edge *edge) const {
-    State   *current = (*state)[edge];
+//    State   *current = (*state)[edge];
     std::list<State*>   clinks;
 
     if (state) {
@@ -290,11 +290,11 @@ FSA *FSA::genericFSA(const std::string str)
 
         std::vector<Edge*> alphabet = Edge::makeEdges(str);
         std::vector<State*> states;
-        for (int i = 0; i < alphabet.size() + 1; ++i) {
+        for (size_t i = 0; i < alphabet.size() + 1; ++i) {
             states.push_back(State::create());
         }
         fsa->addInitialState(states[0]);
-        for (int j = 0; j < states.size(); ++j) {
+        for (size_t j = 0; j < states.size(); ++j) {
             if (j + 1 != states.size())
             {
                 states[j]->addLink(alphabet[j], states[j + 1]);
