@@ -15,10 +15,17 @@ private:
     Closure(State *state);
     LState m_closure;
     static std::list<Closure*> _all;
+    std::list<Edge *> m_edges;
+    std::string m_name;
+
+
 
 public:
+    const std::string &GetName() const;
     const LState &GetClosure() const;
+    State *GetState() const;
     static void freeAll();
+    const std::list<Edge *> &GetEdges() const;
 };
 
 std::ostream& operator<<(std::ostream& os, Closure& obj);

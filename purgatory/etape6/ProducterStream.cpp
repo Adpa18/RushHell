@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <stdexcept>
 #include "ProducterStream.hpp"
 
 ProducterStream::ProducterStream() {
