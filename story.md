@@ -1,0 +1,24 @@
+# Rushhell
+- Charon
+    - functor
+        - objet qui se comporte comme une fonction
+- Purgatory
+    - Finite-state machine
+        - c'est quoi ?
+            - construction abstraite
+            - un nombre fini d'états
+            - un seul état à la fois
+            - le passage d'un état est dirigé par la table d'actions
+            - ce passage est déterminé en function de la table de transition
+        - table d'actions
+            - tableau montrant quel action éxectuer sur la base de l'état actuel et les autres entrées.
+        - table de transition
+            - tableau montrant dans quel état d'un automate fini se déplacer, sur la base de l'état actuel et les autres entrées.
+        - lambda edge
+            - permet à un automate de changer d'état ou de configuration spontanément, sans consommer un symbole d'entrée.
+        - nfa to dfa
+- Devil
+    - Inspector
+        - Permet de savoir si la surchage existe
+    - Bind
+        - Permet de stocker une fonction et ses arguments pour l'appeler plus tard

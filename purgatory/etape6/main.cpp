@@ -153,7 +153,7 @@ void unitTestExport()
 
 void unitTestExpressionParser()
 {
-    ExpressionParser exp("(mechant)|(criminel)");
+    ExpressionParser exp("(mechant)|(criminel)|(saperlipopete)");
 }
 
 int main() {
